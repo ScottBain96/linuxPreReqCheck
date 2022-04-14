@@ -1,16 +1,11 @@
-
-
 #!/bin/bash
 
 echo "Pre-requisites enabler"
 
-user=$(whoami)
+#user=$(whoami)
 
 
 echo "checking for net-tools package"
-
-
-
 
 #Function that will check the installed package Net-tools. Using a function to re-check if the install was successfull.
 
@@ -39,8 +34,9 @@ fi
 }
 
 
-checkPackageNetTools Result
+##calling function result
 
+checkPackageNetTools Result
 
 
 if [ "$Result" = "1" ];

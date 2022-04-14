@@ -2,6 +2,7 @@
 
 echo "Pre-requisites enabler"
 
+#for later
 #user=$(whoami)
 
 

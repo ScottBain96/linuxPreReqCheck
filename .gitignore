@@ -1,0 +1,2 @@
+#ignoring text files as I am using it as a log
+*.txt

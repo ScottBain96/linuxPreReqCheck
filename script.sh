@@ -32,7 +32,7 @@ fi
 #most likely be cached.
 
 
-folderName="test"$(date +"%T")
+folderName="testDir"$(date +"%T")
 
 echo "Testing folder creation with sudo, should not request any credentials"
 

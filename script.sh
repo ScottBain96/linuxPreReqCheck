@@ -5,8 +5,7 @@ echo "Pre-requisites cheker for Linux / MacOS"
 #log file for results
 
 
-logFileName="logPreReq-"$(date +"%T")".txt"
-
+logFileName="resultsLinuxCheck.txt"
 #check user logged
 userLogged=$(whoami)
 
@@ -63,7 +62,12 @@ if [ -d "/opt/""$folderName" ];
 
 then
 
-echo "Folder was created successfuly" | tee -a $logFileName 
+echo "Temporary test folder was created successfuly" | tee -a $logFileName 
+
+sudo rm -r /opt/$folderName | tee -a $logFileName
+
+echo "Temporary test folder was deleted as part of script cleanup" | tee -a $logFileName
+
 
 else
 
@@ -131,7 +135,16 @@ else
 fi
 
 
+
+
+
+
+## TO ADD RESULTS OF SCRIPT AS A SUMMARY BLOCK#
+
+
+
+
 #END OF SCRIPT CONFIRMATION
 
 
-echo "Script ended, please provide results to support" | tee -a $logFileName
+echo "Script ended, please provide $logFileName to support located at the current working directory ( $(pwd) )" | tee -a $logFileName

@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 echo "Pre-requisites cheker for Linux / MacOS"
@@ -16,7 +17,7 @@ echo "logged in as user:  $userLogged" | tee $logFileName
 #displaying the Linux release
 
 
-cat /etc/*release | tee -a $logFileName
+cat /etc/*release | tee -a $logFileName  >/dev/null 2>&1
 
 
 #To check for a list of commands that the user is allowed to run:
@@ -26,27 +27,76 @@ sudo -l | tee -a $logFileName
 
 
 
-##TO ADD CHECKER FOR DETARMINING PYTHON 2 or PYTHON3 (different commands are used for each calling each version)
+# Some systems seem to have both python and python3, handling both scenarios.
 
-python3PathCheck=$(which python3)
+echo "Checking for python and python3 commands:"
 
 
-if [ "$python3PathCheck" = "/usr/bin/python3" ];
+python3PathCheck=$(which python3 2> /dev/null)
+
+python3CommandCheck=$(python3 -V 2> /dev/null)
+
+
+pythonPathCheck=$(which python3 2> /dev/null)
+
+pythonCommandCheck=$(python -V 2> /dev/null) 
+
+
+
+
+
+if [ "$pythonCommandCheck" = "" ];
+
+then
+echo "python command is not found" | tee -a $logFileName
+
+else "python command is found and reports: ""$pythonCommandCheck" | tee -a $logFileName
+
+	if [ "$pythonPathCheck" = "/usr/bin/python" ];
+
+	then
+
+	echo "python path is correct: $pythonPathCheck" | tee -a $logFileName
+
+
+	else echo "python default path does not seem correct, paths found: " | tee -a $logFileName
+
+	which -a python | tee -a $logFileName
+
+	fi
+
+
+fi
+
+
+if [ "$python3CommandCheck" = "" ];
 
 then
 
-echo "python path is correct: $python3PathCheck" | tee -a $logFileName 
+echo "python3 command is not found" | tee -a $logFileName
 
 
-else echo "python default path does not seem correct, paths found: " | tee -a $logFileName 
+else 
 
-which -a python3 | tee -a $logFileName
+echo "python3 command is found and reports:" "$python3CommandCheck" | tee -a $logFileName
+	if [ "$python3PathCheck" = "/usr/bin/python3" ];
+
+	then
+
+	echo "python3 path is correct: $python3PathCheck" | tee -a $logFileName
+
+
+	else echo "python default path does not seem correct, paths found: " | tee -a $logFileName
+
+	which -a python3 | tee -a $logFileName
+
+	fi
 
 fi
 
 
 
-#might need to add a way to reset the terminal to avoid false positives for sudo no credentials requested
+#Might need to add a way to reset the terminal to avoid false positives for sudo no credentials requested
 #example, if they had already typed the sudo creds for a different command under the same session, they will
 #most likely be cached.
 
@@ -147,4 +197,5 @@ fi
 #END OF SCRIPT CONFIRMATION
 
 
-echo "Script ended, please provide $logFileName to support located at the current working directory ( $(pwd) )" | tee -a $logFileName
+echo "Script ended, if you had to type any sudo credentials during the execution of this script there is an issue with the configuration" 
+echo "please notify and provide $logFileName to support located at the current working directory ( $(pwd) )" | tee -a $logFileName

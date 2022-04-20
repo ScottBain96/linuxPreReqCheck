@@ -1,4 +1,4 @@
-
+#
 #!/bin/bash
 
 echo "Pre-requisites cheker for Linux / MacOS"
@@ -175,12 +175,13 @@ then
 	echo "Net-tools package is already installed, skipping..." | tee -a $logFileName
 
 else
-	echo "Proceeding with get-update and installation." | tee -a $logFileName
+	#echo "Proceeding with get-update and installation." | tee -a $logFileName
 	#sleep 2
-	sudo apt-get update | tee -a $logFileName
-	sudo apt-get install net-tools | tee -a $logFileName
-	echo "##### RESULTS #####"
-	checkPackageNetTools Result
+	#removing the auto installations of net-tools for now
+	#sudo apt-get update | tee -a $logFileName
+	#sudo apt-get install net-tools | tee -a $logFileName
+	#echo "##### RESULTS #####"
+	#checkPackageNetTools Result
 
 fi
 

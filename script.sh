@@ -180,7 +180,6 @@ else
 	#removing the auto installations of net-tools for now
 	#sudo apt-get update | tee -a $logFileName
 	#sudo apt-get install net-tools | tee -a $logFileName
-	#echo "##### RESULTS #####"
 	#checkPackageNetTools Result
 
 fi

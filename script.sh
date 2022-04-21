@@ -4,6 +4,11 @@
 exec &> >(tee "ResultAgentChecks.txt")
 
 
+#forget sudo password (incase it has been already provided before this command).
+#The point of this script is that the password should not be requested for any command
+
+sudo -K
+
 
 echo
 echo "Pre-requisites cheker for Linux / MacOS"
@@ -21,13 +26,11 @@ echo "logged in as user:  $userLogged"
 
 echo 
 echo "OS details found:" 
-cat /etc/*release 
+cat /etc/*release | tee -a "ResultAgentChecks.txt" 2> /dev/null 
 echo 
 
 #To check for a list of commands that the user is allowed to run:
-
-
-sudo -l 
+ 
 
 echo
 
@@ -61,7 +64,7 @@ echo "Checking for python commands:"
 if [ "$pythonCommandCheck" = "" ];
 
 then
-echo "python command is not found"
+echo "python command is not found, please note, for ITOM versions under 5006-1, you must have python command configured for python2 version"
 
 else
 
@@ -110,7 +113,7 @@ echo "python3 command is not found"
 else
 
 echo "python3 command is found and reports:" "$python3CommandCheck" 
-
+echo "please note, python3 is only valid for ITOM 5006-1 or higher"
 #exporting all python3 paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
 
 echo "all paths found for which -a python3 command:" 
@@ -151,6 +154,8 @@ folderName="testDir"$(date +"%T")
 
 echo "Testing folder creation with sudo, should not request any credentials" 
 
+sudo -K
+
 sudo mkdir /opt/"$folderName" 
 
 
@@ -171,6 +176,12 @@ echo "Folder does not seem to exist. Please doublecheck /opt/ path"
 
 fi
 
+#To check for a list of commands that the user is allowed to run:
+
+echo
+echo "Listing all available commands (this one doesn't matter if it fails to access)"
+echo
+sudo -l
 
 
 echo 
@@ -240,7 +251,7 @@ fi
 #END OF SCRIPT CONFIRMATION
 
 echo 
-echo "Script ended, if you had to type any sudo credentials during the execution of this script there is an issue with the configuration" 
-echo "please notify and provide $logFileName to support located at the current working directory ( $(pwd) )" 
+echo "Script completed, if you had to type any sudo credentials during the execution of this script, you most likely have issues with pre-requisite command permissions" 
+echo "please notify of any errors or credential requests during script and provide generated ResultAgentChecks.tx to support which is located at the current working directory ( $(pwd) )" 
 echo
 

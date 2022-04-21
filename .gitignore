@@ -2,5 +2,5 @@
 *.txt
 
 #ignoring .txt.swp file
-*.txt.swp
-*.sh.swp
+
+*.swp

@@ -30,7 +30,7 @@ sudo -l | tee -a $logFileName
 
 # Some systems seem to have both python and python3, handling both scenarios.
 
-echo "Checking for python and python3 commands:"
+# all python and python3 commands required
 
 
 python3PathCheck=$(which python3 2> /dev/null)
@@ -38,12 +38,20 @@ python3PathCheck=$(which python3 2> /dev/null)
 python3CommandCheck=$(python3 -V 2> /dev/null)
 
 
+
 pythonPathCheck=$(which python3 2> /dev/null)
 
-pythonCommandCheck=$(python -V 2> /dev/null) 
+pythonCommandCheck=$(python -V 2> /dev/null)
 
 
 
+#Checking if required lib2to3 module is available in the python3 installation. 
+
+
+echo "Checking for python and python3 commands:"
+
+
+#python checks (valid for python & python2)
 
 
 if [ "$pythonCommandCheck" = "" ];
@@ -55,11 +63,14 @@ echo "python command is not found" | tee -a $logFileName
 
 else "python command is found and reports: ""$pythonCommandCheck" | tee -a $logFileName
 
+
 #exporting all python paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
 
 echo "all paths found for which -a python command:" | tee -a $logFileName  >/dev/null 2>&1
 
 which -a python | tee -a $logFileName  >/dev/null 2>&1
+
+	#if python command is found, verify required path matches installed
 
 	if [ "$pythonPathCheck" = "/usr/bin/python" ];
 
@@ -78,6 +89,9 @@ which -a python | tee -a $logFileName  >/dev/null 2>&1
 fi
 
 
+
+#python3 checks (only valid for python3)
+
 if [ "$python3CommandCheck" = "" ];
 
 then
@@ -85,13 +99,14 @@ then
 echo "python3 command is not found" | tee -a $logFileName
 
 
-else 
+else
 
 echo "python3 command is found and reports:" "$python3CommandCheck" | tee -a $logFileName
 
 #exporting all python3 paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
 
 echo "all paths found for which -a python3 command:" | tee -a $logFileName  >/dev/null 2>&1
+
 which -a python3 | tee -a $logFileName  >/dev/null 2>&1
 
 	if [ "$python3PathCheck" = "/usr/bin/python3" ];
@@ -100,12 +115,16 @@ which -a python3 | tee -a $logFileName  >/dev/null 2>&1
 
 	echo "python3 path is correct: $python3PathCheck" | tee -a $logFileName
 
+	echo "Checked for lib2to3 module in the python3 installation, if missing, error will appear bellow..." | tee -a $logFileName
+	python3 -c "from lib2to3.main import main" 2>&1 | tee -a $logFileName
 
-	else echo "python default path does not seem correct, paths found: " | tee -a $logFileName
+	else echo "python3 default path does not seem correct, paths found: " | tee -a $logFileName
 
 	which -a python3 | tee -a $logFileName
 
 	fi
+
+
 
 fi
 

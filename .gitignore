@@ -1,6 +1,7 @@
 #ignoring text files as I am using it as a log
 *.txt
 
-#ignoring .txt.swp file
+#ignoring temp files
 
+*.save
 *.swp

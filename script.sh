@@ -1,30 +1,40 @@
 #!/bin/bash
+#exec 1>logfiletest.txt
+#exec 2>&1
 
-echo "Pre-requisites cheker for Linux / MacOS"
+exec &> >(tee "logtest.txt")
 
 #log file for results
-
-
 logFileName="resultsLinuxCheck.txt"
+
+#using echo| tee -a $logFileName for new lines on file.
+
+echo
+echo "Pre-requisites cheker for Linux / MacOS" | tee $logFileName
+echo | tee -a $logFileName
+
+
 #check user logged
 userLogged=$(whoami)
 
 echo "if you receive any request for password from now until script finishes, it is possible that you pre-requisites are not correct"
-
-echo "logged in as user:  $userLogged" | tee $logFileName
+echo | tee -a $logFileName
+echo "logged in as user:  $userLogged" | tee -a $logFileName
 
 
 #displaying the Linux release
+cat /etc/*release
 
-
+echo | tee -a $logFileName
+echo "OS details found:" | tee -a $logFileName >/dev/null 2>&1
 cat /etc/*release | tee -a $logFileName  >/dev/null 2>&1
-
+echo | tee -a $logFileName
 
 #To check for a list of commands that the user is allowed to run:
 
 
 sudo -l | tee -a $logFileName 
-
+echo | tee -a $logFileName
 
 
 # Some systems seem to have both python and python3, handling both scenarios.
@@ -50,9 +60,7 @@ pythonVersionCheck=`python -V 2>&1 /dev/null`
 
 
 
-echo "Checking for python and python3 commands:"
-
-
+echo "Checking for python commands:" | tee -a $logFileName
 #python checks (valid for python & python2)
 
 
@@ -60,8 +68,6 @@ if [ "$pythonCommandCheck" = "" ];
 
 then
 echo "python command is not found" | tee -a $logFileName
-
-
 
 else
 
@@ -71,7 +77,6 @@ echo "python command is found and reports: " "$pythonVersionCheck" | tee -a $log
 #exporting all python paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
 
 echo "all paths found for which -a python command:" | tee -a $logFileName  >/dev/null 2>&1
-
 which -a python | tee -a $logFileName  >/dev/null 2>&1
 
 	#if python command is found, verify required path matches installed
@@ -79,7 +84,6 @@ which -a python | tee -a $logFileName  >/dev/null 2>&1
 	if [ "$pythonPathCheck" = "/usr/bin/python" ];
 
 	then
-
 	echo "python path is correct: $pythonPathCheck" | tee -a $logFileName
 	echo "Checked for sqlite3 module in the python installation, error will only appear bellow if not found" | tee -a $logFileName
 	python -c "import sqlite3" 2>&1 | tee -a $logFileName
@@ -94,6 +98,10 @@ which -a python | tee -a $logFileName  >/dev/null 2>&1
 
 fi
 
+
+echo| tee -a $logFileName
+
+echo "Checking for python3 commands:" | tee -a $logFileName
 
 
 #python3 checks (only valid for python3)
@@ -122,7 +130,7 @@ which -a python3 | tee -a $logFileName  >/dev/null 2>&1
 	echo "python3 path is correct: $python3PathCheck" | tee -a $logFileName
 
 	echo "Checked for sqlite3 module in the python3 installation, error will only appear bellow if not found" | tee -a $logFileName
-        python -c "import sqlite3" 2>&1 | tee -a $logFileName
+        python3 -c "import sqlite3" 2>&1 | tee -a $logFileName
 
 	echo "Checked for lib2to3 module in the python3 installation, error will only appear bellow if not found" | tee -a $logFileName
 	python3 -c "from lib2to3.main import main" 2>&1 | tee -a $logFileName
@@ -144,7 +152,7 @@ fi
 #example, if they had already typed the sudo creds for a different command under the same session, they will
 #most likely be cached.
 
-
+echo | tee -a $logFileName
 folderName="testDir"$(date +"%T")
 
 echo "Testing folder creation with sudo, should not request any credentials" | tee -a $logFileName 
@@ -171,7 +179,7 @@ fi
 
 
 
-
+echo | tee -a $logFileName
 echo "checking for net-tools package" | tee -a $logFileName
 
 
@@ -220,7 +228,7 @@ else
 	#removing the auto installations of net-tools for now
 	#sudo apt-get update | tee -a $logFileName
 	#sudo apt-get install net-tools | tee -a $logFileName
-	echo "installation of net-tools required"
+	echo "installation of net-tools is required"
 	#checkPackageNetTools Result
 
 fi
@@ -237,6 +245,8 @@ fi
 
 #END OF SCRIPT CONFIRMATION
 
-
+echo| tee -a $logFileName
 echo "Script ended, if you had to type any sudo credentials during the execution of this script there is an issue with the configuration" 
 echo "please notify and provide $logFileName to support located at the current working directory ( $(pwd) )" | tee -a $logFileName
+echo| tee -a $logFileName
+

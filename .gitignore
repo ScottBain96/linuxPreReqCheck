@@ -3,5 +3,5 @@
 
 #ignoring temp files
 
-*.save
+*.txt.save*
 *.swp

@@ -24,15 +24,14 @@ echo "logged in as user:  $userLogged"
 
 #displaying the Linux release
 
-echo 
-echo "OS details found:" 
-cat /etc/*release | tee -a "ResultAgentChecks.txt" 2> /dev/null 
-echo 
-
-#To check for a list of commands that the user is allowed to run:
- 
-
 echo
+echo "OS details found:" 
+cat /etc/*release 
+echo 
+
+
+
+
 
 # Some systems seem to have both python and python3, handling both scenarios.
 
@@ -54,6 +53,8 @@ pythonCommandCheck=$(which -a python 2> /dev/null)
 pythonVersionCheck=`python -V 2>&1 /dev/null`
 
 
+
+#to add version checks for python to make sure they meet minimum required version e,g 2.6+ for python
 
 
 

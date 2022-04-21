@@ -39,13 +39,16 @@ python3CommandCheck=$(python3 -V 2> /dev/null)
 
 
 
-pythonPathCheck=$(which python3 2> /dev/null)
+pythonPathCheck=$(which python 2> /dev/null)
 
-pythonCommandCheck=$(python -V 2> /dev/null)
+#this one specifically needs a different way as python command sends it to stderr...
+
+pythonCommandCheck=$(which -a python 2> /dev/null)
+
+pythonVersionCheck=`python -V 2>&1 /dev/null`
 
 
 
-#Checking if required lib2to3 module is available in the python3 installation. 
 
 
 echo "Checking for python and python3 commands:"
@@ -63,7 +66,7 @@ echo "python command is not found" | tee -a $logFileName
 
 else
 
-echo "python command is found and reports: ""$pythonCommandCheck" | tee -a $logFileName
+echo "python command is found and reports: " "$pythonVersionCheck" | tee -a $logFileName
 
 
 #exporting all python paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths

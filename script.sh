@@ -10,6 +10,7 @@ logFileName="resultsLinuxCheck.txt"
 #check user logged
 userLogged=$(whoami)
 
+echo "if you receive any request for password from now until script finishes, it is possible that you pre-requisites are not correct"
 
 echo "logged in as user:  $userLogged" | tee $logFileName
 
@@ -50,7 +51,15 @@ if [ "$pythonCommandCheck" = "" ];
 then
 echo "python command is not found" | tee -a $logFileName
 
+
+
 else "python command is found and reports: ""$pythonCommandCheck" | tee -a $logFileName
+
+#exporting all python paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
+
+echo "all paths found for which -a python command:" | tee -a $logFileName  >/dev/null 2>&1
+
+which -a python | tee -a $logFileName  >/dev/null 2>&1
 
 	if [ "$pythonPathCheck" = "/usr/bin/python" ];
 
@@ -79,6 +88,12 @@ echo "python3 command is not found" | tee -a $logFileName
 else 
 
 echo "python3 command is found and reports:" "$python3CommandCheck" | tee -a $logFileName
+
+#exporting all python3 paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
+
+echo "all paths found for which -a python3 command:" | tee -a $logFileName  >/dev/null 2>&1
+which -a python3 | tee -a $logFileName  >/dev/null 2>&1
+
 	if [ "$python3PathCheck" = "/usr/bin/python3" ];
 
 	then

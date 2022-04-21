@@ -61,7 +61,9 @@ echo "python command is not found" | tee -a $logFileName
 
 
 
-else "python command is found and reports: ""$pythonCommandCheck" | tee -a $logFileName
+else
+
+echo "python command is found and reports: ""$pythonCommandCheck" | tee -a $logFileName
 
 
 #exporting all python paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
@@ -79,7 +81,8 @@ which -a python | tee -a $logFileName  >/dev/null 2>&1
 	echo "python path is correct: $pythonPathCheck" | tee -a $logFileName
 
 
-	else echo "python default path does not seem correct, paths found: " | tee -a $logFileName
+	else
+	echo "python default path does not seem correct, paths found: " | tee -a $logFileName
 
 	which -a python | tee -a $logFileName
 
@@ -118,7 +121,8 @@ which -a python3 | tee -a $logFileName  >/dev/null 2>&1
 	echo "Checked for lib2to3 module in the python3 installation, if missing, error will appear bellow..." | tee -a $logFileName
 	python3 -c "from lib2to3.main import main" 2>&1 | tee -a $logFileName
 
-	else echo "python3 default path does not seem correct, paths found: " | tee -a $logFileName
+	else
+	echo "python3 default path does not seem correct, paths found: " | tee -a $logFileName
 
 	which -a python3 | tee -a $logFileName
 
@@ -162,13 +166,8 @@ fi
 
 
 
-
-
-
-
-
 echo "checking for net-tools package" | tee -a $logFileName
- 
+
 
 
 #Function that will check the installed package Net-tools. Using a function to re-check if the install was successfull.

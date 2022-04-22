@@ -245,7 +245,10 @@ fi
 
 
 echo 
-echo "Script completed, if you had to type any sudo credentials during the execution of this script, you most likely have issues with pre-requisite command permissions" 
-echo "please provide the results of the script to support" 
+echo "Script completed"
+echo
+echo "if you had to type any sudo credentials during the execution of this script, you most likely have issues with pre-requisite command permissions." 
+echo "This would affect if you are installing agents remotely via ITOM, manual installs using sudo in the command would not be affected."
+echo "Please provide the results of the script to support" 
 echo
 

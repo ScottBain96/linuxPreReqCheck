@@ -32,8 +32,6 @@ echo
 
 
 
-
-
 # Some systems seem to have both python and python3, handling both scenarios.
 
 # all python and python3 commands required
@@ -70,47 +68,43 @@ if [ "$pythonCommandCheck" = "" ];
 
 then
 
-echo "python command is not found."
+	echo "python command is not found."
 
 	if [ "$python2CommandCheck" != "" ];
 	then
-	echo "python2 is found but it is NOT configured correctly (must be accessible by running command python)"
+		echo "python2 is found but it is NOT configured correctly (must be accessible by running command python)"
 	fi
 
-echo "Please note, for ITOM versions under 5006-1, you must have python command configured to point to python or python2 version"
+	echo "Please note, for ITOM versions under 5006-1, you must have python command configured to point to python or python2 version"
+
 else
 
-echo "python command is found and reports: " "$pythonVersionCheck"
+	echo "python command is found and reports: " "$pythonVersionCheck"
 
 
-#exporting all python paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
+	#exporting all paths
 
-echo "all paths found for which -a python command:" 
-which -a python
+	echo "all paths found for which -a python command:" 
+	which -a python
 
 	#if python command is found, verify required path matches installed
 
 	if [ "$pythonPathCheck" = "/usr/bin/python" ];
-
 	then
-	echo "python path is correct: $pythonPathCheck" 
-	echo "Checked for sqlite3 module in the python installation, error will only appear bellow if not found" 
-	python -c "import sqlite3" 2>&1
-
+		echo "python path is correct: $pythonPathCheck" 
+		echo "Checked for sqlite3 module in the python installation, error will only appear bellow if not found" 
+		python -c "import sqlite3" 2>&1
 	else
-	echo "python default path does not seem correct, paths found: " 
-
-	which -a python 
+		echo "python default path does not seem correct, paths found: " 
+		which -a python
 
 	fi
-
 
 fi
 
 
 echo
-
-echo "Checking for python3 commands:" 
+echo "Checking for python3 commands:"
 
 
 #python3 checks (only valid for python3)
@@ -121,11 +115,11 @@ then
 
 echo "python3 command is not found" 
 
-
 else
 
 echo "python3 command is found and reports:" "$python3CommandCheck" 
 echo "please note, python3 is only valid for ITOM 5006-1 or higher"
+
 #exporting all python3 paths to the log file only, incase maybe there is an extra path causing an issue? some builds seem to report multiple secondary paths
 
 echo "all paths found for which -a python3 command:" 
@@ -136,55 +130,48 @@ which -a python3
 
 	then
 
-	echo "python3 path is correct: $python3PathCheck" 
-
-	echo "Checked for sqlite3 module in the python3 installation, error will only appear bellow if not found" 
-        python3 -c "import sqlite3" 2>&1 
-
-	echo "Checked for lib2to3 module in the python3 installation, error will only appear bellow if not found" 
-	python3 -c "from lib2to3.main import main" 2>&1 
+		echo "python3 path is correct: $python3PathCheck" 
+		echo "Checked for sqlite3 module in the python3 installation, error will only appear bellow if not found" 
+        	python3 -c "import sqlite3" 2>&1 
+		echo "Checked for lib2to3 module in the python3 installation, error will only appear bellow if not found" 
+		python3 -c "from lib2to3.main import main" 2>&1 
 
 	else
-	echo "python3 default path does not seem correct, paths found: " 
-
-	which -a python3 
+		echo "python3 default path does not seem correct, paths found: " 
+		which -a python3 
 
 	fi
-
-
 
 fi
 
 
+echo
 
-#Might need to add a way to reset the terminal to avoid false positives for sudo no credentials requested
-#example, if they had already typed the sudo creds for a different command under the same session, they will
-#most likely be cached.
-
-echo 
+#folder with unique name
 folderName="testDir"$(date +"%T")
+
 
 echo "Testing folder creation with sudo, should not request any credentials" 
 
 sudo -K
 
-sudo mkdir /opt/"$folderName" 
+sudo mkdir /opt/"$folderName"
 
 
 if [ -d "/opt/""$folderName" ];
 
 then
 
-echo "Temporary test folder was created successfuly" 
+	echo "Temporary test folder was created successfuly" 
 
-sudo rm -r /opt/$folderName 
+	sudo rm -r /opt/$folderName 
 
-echo "Temporary test folder was deleted as part of script cleanup" 
+	echo "Temporary test folder was deleted as part of script cleanup" 
 
 
 else
 
-echo "Folder does not seem to exist. Please doublecheck /opt/ path" 
+	echo "Folder does not seem to exist. Please doublecheck /opt/ path" 
 
 fi
 
@@ -202,76 +189,60 @@ testDPKG=$(dpkg --version 2> /dev/null)
 testYUM=$(yum --version 2> /dev/null)
 commandToUse=""
 
-if [ "$testDPKG" == "" ];
 
+
+if [ "$testDPKG" == "" ];
 then
-echo "dpkg is not available in this set up"
+	echo "dpkg is not available in this set up"
 	if [ "$testYUM" == "" ];
 	then
-	echo "could not find either yum or dpkg"
+		echo "could not find either yum or dpkg"
 	else
-	echo "YUM is available in this set up"
-	commandToUse="yum"
+		echo "YUM is available in this set up"
+		commandToUse="yum"
 	fi
-
-
 
 else
 
-commandToUse="dpkg"
-echo
-echo "DPKG is available in the set up"
+	commandToUse="dpkg"
+	echo
+	echo "DPKG is available in the set up"
+
 fi
+
+
 echo
-
-
-
-
 echo "checking for net-tools package"
 
 
 
 if [ "$commandToUse" = "dpkg" ];
 then
-checkNetPkgs=$(sudo dpkg-query -l | grep -c "net-tools")
+	checkNetPkgs=$(sudo dpkg-query -l | grep -c "net-tools")
 
 	if [ "$checkNetPkgs" = "1" ];
         then
-        echo "Net-tools package is confirmed installed"
+        	echo "Net-tools package is confirmed installed"
 	else
-	echo "Net-tools package is not installed"
+		echo "Net-tools package is not installed"
 	fi
 
 elif [ "$commandToUse" = "yum" ];
 then
-checkNetPkgs=$(sudo yum list installed | grep net-tools)
+	checkNetPkgs=$(sudo yum list installed | grep net-tools)
 	if [ "$checkNetPkgs" = "" ];
         then
-        echo "Net-tools package is not installed"
+        	echo "Net-tools package is not installed"
         else
-        echo "Net-tools package is installed"
+        	echo "Net-tools package is installed"
         fi
 
-
-
-
 else
-echo "Not found any valid way to verify net-tools package, please confirm manually"
+	echo "Not found any valid way to verify net-tools package, please confirm manually"
 
 fi
 
 
-
-
-
-
-
-## TO ADD RESULTS OF SCRIPT AS A SUMMARY BLOCK#
-
-
-
-
-#END OF SCRIPT CONFIRMATION
 
 echo 
 echo "Script completed, if you had to type any sudo credentials during the execution of this script, you most likely have issues with pre-requisite command permissions" 

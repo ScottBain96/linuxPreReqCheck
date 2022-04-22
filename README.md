@@ -1,6 +1,11 @@
+
+
 Creating a script to automate pre-requisite check for ITOM agent linux/macOS for test environments.
 
 Tested on Ubuntu, Fedora and centOS7.
+
+
+
 
 **Currently checks for following pre-requisites:**
 

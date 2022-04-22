@@ -44,7 +44,9 @@ python3CommandCheck=$(python3 -V 2> /dev/null)
 
 
 
-pythonPathCheck=$(which python 2> /dev/null)
+#pythonPathCheck=$(which python 2> /dev/null)
+
+pythonPathCheck=$(which -a python | grep /usr/bin/python 2> /dev/null)
 
 #this one specifically needs a different way as python command sends it to stderr...
 

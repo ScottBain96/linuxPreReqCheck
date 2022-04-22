@@ -208,7 +208,7 @@ echo "dpkg is not available in this set up"
 else
 
 commandToUse="dpkg"
-
+echo
 echo "DPKG is available in the set up"
 fi
 echo
@@ -245,7 +245,7 @@ checkNetPkgs=$(sudo yum list installed | grep net-tools)
 
 
 else
-echo "not found any valid way to verify net-tools package"
+echo "Not found any valid way to verify net-tools package, please confirm manually"
 
 fi
 

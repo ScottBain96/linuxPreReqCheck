@@ -1,7 +1,8 @@
 #!/bin/bash
 
+#Removed log file functionality as was missing any user input requests (example, if user was requested to add sudo creds).
 #log file for results
-exec &> >(tee "ResultAgentChecks.txt")
+#exec &> >(tee "ResultAgentChecks.txt")
 
 
 #forget sudo password (incase it has been already provided before this command).
@@ -52,6 +53,9 @@ pythonCommandCheck=$(which -a python 2> /dev/null)
 
 pythonVersionCheck=`python -V 2>&1 /dev/null`
 
+#Specific scenario for no python command, but python2 exists.
+
+python2CommandCheck=$(which -a python2 2> /dev/null)
 
 
 #to add version checks for python to make sure they meet minimum required version e,g 2.6+ for python
@@ -65,8 +69,15 @@ echo "Checking for python commands:"
 if [ "$pythonCommandCheck" = "" ];
 
 then
-echo "python command is not found, please note, for ITOM versions under 5006-1, you must have python command configured for python2 version"
 
+echo "python command is not found."
+
+	if [ "$python2CommandCheck" != "" ];
+	then
+	echo "python2 is found but it is NOT configured correctly (must be accessible by running command python)"
+	fi
+
+echo "Please note, for ITOM versions under 5006-1, you must have python command configured to point to python or python2 version"
 else
 
 echo "python command is found and reports: " "$pythonVersionCheck"
@@ -264,6 +275,6 @@ fi
 
 echo 
 echo "Script completed, if you had to type any sudo credentials during the execution of this script, you most likely have issues with pre-requisite command permissions" 
-echo "please notify of any errors or credential requests during script and provide generated ResultAgentChecks.tx to support which is located at the current working directory ( $(pwd) )" 
+echo "please provide the results of the script to support" 
 echo
 

@@ -38,13 +38,11 @@ echo
 # all python and python3 commands required
 
 
-python3PathCheck=$(which python3 2> /dev/null)
+python3PathCheck=$(which -a python3 | grep /usr/bin/python3 2> /dev/null)
 
 python3CommandCheck=$(python3 -V 2> /dev/null)
 
 
-
-#pythonPathCheck=$(which python 2> /dev/null)
 
 pythonPathCheck=$(which -a python | grep /usr/bin/python 2> /dev/null)
 

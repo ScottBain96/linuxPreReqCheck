@@ -185,59 +185,70 @@ echo
 sudo -l
 
 
-echo 
-echo "checking for net-tools package" 
+#determining what type of package manager is available
 
+testDPKG=$(dpkg --version 2> /dev/null)
+testYUM=$(yum --version 2> /dev/null)
+commandToUse=""
 
-
-#Currently not in use for the installation, just reporting on net-tools status.
-#Function that will check the installed package Net-tools. Using a function to re-check if the install was successfull.
-
-function checkPackageNetTools () {
-
-checkNetPkgs=$(sudo dpkg-query -l | grep -c "net-tools")
-
-local  __resultvar=$1
-
-if [ "$checkNetPkgs" = "1" ];
-
-        then
-               local myresult='1'
-                echo "Net-tools package is confirmed installed" 
-
-        else
-
-               local myresult='0'
-               echo "Net-Tools is not installed" 
-
-
-fi
-
-    eval $__resultvar="'$myresult'"
-}
-
-
-##calling function result
-
-checkPackageNetTools Result
-
-
-if [ "$Result" = "1" ];
+if [ "$testDPKG" == "" ];
 
 then
+echo "dpkg is not available in this set up"
+	if [ "$testyumn" == "" ];
+	then
+	echo "could not find either yum or dpkg"
+	else
+	echo "found yum"
+	commandToUse="yum"
+	fi
 
-	echo "Net-tools package is already installed, skipping..." 
+
 
 else
-	#echo "Proceeding with get-update and installation." 
-	#sleep 2
-	#removing the auto installations of net-tools for now
-	#sudo apt-get update 
-	#sudo apt-get install net-tools 
-	echo "installation of net-tools is required"
-	#checkPackageNetTools Result
+
+commandToUse="dpkg"
+
+echo "DPKG is available in the set up" "$commandToUse"
+fi
+echo
+
+
+
+
+echo "checking for net-tools package"
+
+
+
+if [ "$commandToUse" = "dpkg" ];
+then
+checkNetPkgs=$(sudo dpkg-query -l | grep -c "net-tools")
+
+	if [ "$checkNetPkgs" = "1" ];
+        then
+        echo "Net-tools package is confirmed installed"
+	else
+	echo "Net-tools package is not installed"
+	fi
+
+elif [ "$commandToUse" = "yum" ];
+then
+checkNetPkgs=$(sudo yum list installed | grep net-tools)
+	if [ "$checkNetPkgs" = "" ];
+        then
+        echo "Net-tools package is not installed"
+        else
+        echo "Net-tools package is installed"
+        fi
+
+
+
+
+else
+echo "not found any valid way to verify net-tools package"
 
 fi
+
 
 
 

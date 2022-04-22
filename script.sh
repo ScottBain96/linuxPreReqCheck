@@ -195,11 +195,11 @@ if [ "$testDPKG" == "" ];
 
 then
 echo "dpkg is not available in this set up"
-	if [ "$testyumn" == "" ];
+	if [ "$testYUM" == "" ];
 	then
 	echo "could not find either yum or dpkg"
 	else
-	echo "found yum"
+	echo "YUM is available in this set up"
 	commandToUse="yum"
 	fi
 
@@ -209,7 +209,7 @@ else
 
 commandToUse="dpkg"
 
-echo "DPKG is available in the set up" "$commandToUse"
+echo "DPKG is available in the set up"
 fi
 echo
 

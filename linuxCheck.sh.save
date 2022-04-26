@@ -58,9 +58,7 @@ python2CommandCheck=$(which -a python2 2> /dev/null)
 
 #to add version checks for python to make sure they meet minimum required version e,g 2.6+ for python
 
-pythonMinV=$(python -c 'import sys; print(sys.version_info >= (2, 6) and "1" or "0")')
 
-python3MinV=$(python3 -c 'import sys; print(sys.version_info >= (3, 4) and "1" or "0")')
 
 
 echo "Checking for python commands:"
@@ -103,13 +101,6 @@ else
 
 	fi
 
-	if [ $pythonMinV = "0" ];
-	then
-		echo "python version not supported, min version is 2.6"
-
-	else
-		echo "python version is supported"
-	fi
 fi
 
 
@@ -151,14 +142,6 @@ which -a python3
 		which -a python3 
 
 	fi
-
-	if [ $python3MinV = "0" ];
-        then
-                echo "python3 version not supported, min version is 3.4"
-
-        else
-                echo "python3 version is supported"
-        fi
 
 fi
 

@@ -19,6 +19,8 @@ Tested on Ubuntu, Fedora and centOS7.
 
 -if python path does not match pre-requisite, it will provide all found paths (for both python and python3)
 
+-python minimum version checks (for both python and python3)
+
 -python library sqlite3 (for both python and python3)
 
 -python library lib2to3 (python3)
